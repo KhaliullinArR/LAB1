@@ -48,64 +48,17 @@ int AmountLessThan(double x[], int len, double n)
     return s;
 }
 
-int Output(double a[], double b[], double c[], int na, int nb, int nc, int *sa, int *sb, int *sc, double *num) {
-    FILE* file;
-    const char* out = "output.txt";
-
-    if ((file = fopen(out, "w")) == NULL)
-    {
-        printf("Невозможно открыть файл для записи\n");
-        return 0;
-    }
-
-    fprintf(file, "Исходные данные:\n\nМассив A:\n");
-
+int OutputArray(double a[], int na, FILE *file) {
+    
     for (int i = 0; i < na; i++){
-        fprintf(file, "%-g ", a[i]);
+        if (fprintf(file, "%-g ", a[i]) < 1) {
+            return 0;
+        }
     }
 
     fprintf(file, "\n");
     fprintf(file, "\n");
 
-    fprintf(file, "Массив 'B':\n");
-
-    for (int i = 0; i < nb; i++) {
-        fprintf(file, "%-g ", b[i]);
-    }
-
-    fprintf(file,"\n");
-    fprintf(file, "\n");
-    fprintf(file, "Массив С:\n");
-    for (int i = 0; i < nc; i++) {
-        fprintf(file, "%-g ", c[i]);
-    }
-
-    fprintf(file, "\n");
-    fprintf(file, "\n");
-
-
-    if (sa == sb && sa == sc) printf("%s", "В трех массивах кол-во искомых элементов совпадают");
-    else if (sa > sb && sa > sc) {
-        fprintf(file, "%s %lg %s", "В массиве A кол-во элементов меньших ", *num, " наибольшее.\n");
-        if (sb == sc)fprintf(file, "%s %lg %s", "В массиве B кол-во элементов меньших ", *num, " равно кол-ву элементов в C.");
-    }
-    else if (sb > sa && sb > sc) {
-        fprintf(file, "%s %lg %s", "В массиве B кол-во элементов меньших ", *num, " наибольшее.\n");
-        if (sa == sc)fprintf(file, "%s %g %s", "В массиве A кол-во элементов меньших ", *num, " равно кол-ву элементов в C.");
-    }
-    else if (sc > sa && sc > sb) {
-        fprintf(file, "%s %lg %s", "В массиве C кол-во элементов меньших ", *num, " наибольшее.\n");
-        if (sa == sb)fprintf(file, "%s %g %s", "В массиве B кол-во элементов меньших ", *num, " равно кол-ву элементов в A.");
-    }
-    else if (sa == sb && sa > sc) {
-        fprintf(file, "%s %lg %s", "В массивах A и B кол-во элементов меньших ", *num, " наибольшее и равны между собой.");
-    }
-    else if (sb == sc && sb > sa) {
-        fprintf(file, "%s %lg %s", "В массивах A и C кол-во элементов меньших ", *num, " наибольшее и равны между собой.");
-    }
-    else if (sa == sc && sc > sb) {
-        fprintf(file, "%s %lg %s", "В массивах C и A кол-во элементов меньших ", *num, " наибольшее и равны между собой.");
-    }
 
     return 1;
 }
@@ -116,6 +69,12 @@ int main(int argc, char* argv[])
     double num;
     int na, nb, nc, sa = 0, sb = 0, sc = 0;
 
+    FILE* file;
+
+    if ((file = fopen("output.txt", "w")) == NULL){
+        printf("Невозможно открыть файл для записи\n");
+        return 1;
+    }
 
     setlocale(LC_ALL, "rus");                            
 
@@ -134,13 +93,50 @@ int main(int argc, char* argv[])
         return 1;
     if (!ArrayInput(&nc, c, argv[3]))
         return 1;
+
+
+    printf("Исходные данные массива A:\n");
+    if (!OutputArray(a, na, file)) {
+        return 1;
+    }
+
+    printf("Исходные данные массива B:\n");
+    if (!OutputArray(b, nb, file)) {
+        return 1;
+    }
     
+    printf("Исходные данные массива C:\n");
+    if (!OutputArray(c, nc, file)) {
+        return 1;
+    }
+
     sa = AmountLessThan(a, na, num);
     sb = AmountLessThan(b, nb, num);
     sc = AmountLessThan(c, nc, num);
 
-    if (!Output(a, b, c, na, nb, nc, &sa, &sb, &sc, &num))
-        return 1;
+    if (sa == sb && sa == sc) printf("%s", "В трех массивах кол-во искомых элементов совпадают");
+    else if (sa > sb && sa > sc) {
+        printf("%s %lg %s", "В массиве A кол-во элементов меньших ", num, " наибольшее.\n");
+        if (sb == sc)printf("%s %lg %s", "В массиве B кол-во элементов меньших ", num, " равно кол-ву элементов в C.");
+    }
+    else if (sb > sa && sb > sc) {
+        printf("%s %lg %s", "В массиве B кол-во элементов меньших ", num, " наибольшее.\n");
+        if (sa == sc)printf("%s %g %s", "В массиве A кол-во элементов меньших ", num, " равно кол-ву элементов в C.");
+    }
+    else if (sc > sa && sc > sb) {
+        printf("%s %lg %s", "В массиве C кол-во элементов меньших ", num, " наибольшее.\n");
+        if (sa == sb)printf("%s %g %s", "В массиве B кол-во элементов меньших ", num, " равно кол-ву элементов в A.");
+    }
+    else if (sa == sb && sa > sc) {
+        printf("%s %lg %s", "В массивах A и B кол-во элементов меньших ", num, " наибольшее и равны между собой.");
+    }
+    else if (sb == sc && sb > sa) {
+        printf("%s %lg %s", "В массивах A и C кол-во элементов меньших ", num, " наибольшее и равны между собой.");
+    }
+    else if (sa == sc && sc > sb) {
+        printf("%s %lg %s", "В массивах C и A кол-во элементов меньших ", num, " наибольшее и равны между собой.");
+    }
+    fclose(file);
    
 }
 

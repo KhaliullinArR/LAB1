@@ -1,8 +1,8 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-double* ArrayInput(int*, char*);
+void ArrayInput(int*, char*, double*&);
 int AmountLessThan(double*, int, double);
-int Output(double*, double*, double*, int, int, int, int*, int*, int*, double*);
+int OutputArray(double*, int, FILE*);
 
 #endif

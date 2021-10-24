@@ -139,12 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\Lab1.4\A.txt" />
+    <Text Include="..\Lab1.4\B.txt" />
+    <Text Include="..\Lab1.4\C.txt" />
     <Text Include="A.txt" />
     <Text Include="B.txt" />
     <Text Include="C.txt" />
     <Text Include="output.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Lab1.4\Array.cpp" />
+    <ClCompile Include="..\Lab1.4\Source.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
